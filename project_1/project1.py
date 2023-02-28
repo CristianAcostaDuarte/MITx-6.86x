@@ -39,6 +39,10 @@ def hinge_loss_single(feature_vector, label, theta, theta_0):
         parameters.
     """
     # Your code here
+    z = label*((np.dot(theta,feature_vector)+theta_0))
+    losses = np.maximum(0.0, 1 - z)
+
+    return losses
     raise NotImplementedError
 
 
@@ -97,6 +101,14 @@ def perceptron_single_step_update(
         the updated offset parameter `theta_0` as a floating point number
     """
     # Your code here
+    
+
+    
+    if (label*(np.dot(current_theta,feature_vector) + current_theta_0)) <= 0:
+        current_theta = current_theta + label*feature_vector
+        current_theta_0 = current_theta_0 + label
+
+    return (current_theta, current_theta_0)
     raise NotImplementedError
 
 
@@ -124,13 +136,18 @@ def perceptron(feature_matrix, labels, T):
             (found also after T iterations through the feature matrix).
     """
     # Your code here
-    raise NotImplementedError
+    current_theta = np.zeros(feature_matrix.shape[1])
+    current_theta_0 = 0
+    
+
     for t in range(T):
-        for i in get_order(nsamples):
+        for i in get_order(feature_matrix.shape[0]):
             # Your code here
-            raise NotImplementedError
+            current_theta,current_theta_0 = perceptron_single_step_update(feature_matrix[i],labels[i],current_theta,current_theta_0)
+            
     # Your code here
-    raise NotImplementedError
+    return (current_theta,current_theta_0)
+
 
 
 
@@ -161,6 +178,23 @@ def average_perceptron(feature_matrix, labels, T):
             (averaged also over T iterations through the feature matrix).
     """
     # Your code here
+    current_theta = np.zeros(feature_matrix.shape[1])
+    current_theta_0 = 0
+    theta_final  = np.zeros(feature_matrix.shape[1])
+    theta_final_0 = 0
+    n = feature_matrix.shape[0]
+
+    for t in range(T):
+        for i in get_order(feature_matrix.shape[0]):
+            current_theta,current_theta_0 = perceptron_single_step_update(feature_matrix[i],labels[i],current_theta,current_theta_0)
+            theta_final = current_theta + theta_final
+            theta_final_0 = current_theta_0 + theta_final_0
+            
+
+    theta_final = theta_final / (n*T)
+    theta_final_0 = theta_final_0 / (n*T)
+
+    return (theta_final,theta_final_0)
     raise NotImplementedError
 
 
@@ -192,6 +226,14 @@ def pegasos_single_step_update(
         completed.
     """
     # Your code here
+
+    if label*(np.dot(theta,feature_vector)+theta_0) <= 1:
+        theta = (1-eta*L)*theta + eta*label*feature_vector
+        theta_0 = theta_0 + eta*label 
+    else:
+        theta = (1-eta*L)*theta
+    return (theta,theta_0)
+
     raise NotImplementedError
 
 
@@ -224,6 +266,23 @@ def pegasos(feature_matrix, labels, T, L):
         after T iterations through the feature matrix.
     """
     # Your code here
+
+    current_theta = np.zeros(feature_matrix.shape[1])
+    current_theta_0 = 0
+    n = 0
+    eta = 0
+
+    for t in range(T):
+        for i in get_order(feature_matrix.shape[0]):
+            n = n + 1
+            eta = 1 / ((n)**(1/2))
+            current_theta,current_theta_0 =  pegasos_single_step_update(feature_matrix[i],labels[i],L,eta,current_theta,current_theta_0)
+            
+
+    
+
+    return (current_theta,current_theta_0)
+
     raise NotImplementedError
 
 
