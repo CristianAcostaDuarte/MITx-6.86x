@@ -370,7 +370,7 @@ def classifier_accuracy(
     val_y_out= classify(val_feature_matrix, train_theta, train_theta_0 )
     val_accuracy = accuracy(val_y_out, val_labels)
 
-    return (train_accuracy,val_accuracy)
+    return (train_accuracy,val_accuracy, train_theta, train_theta_0, val_theta, val_theta_0 )
     raise NotImplementedError
 
 

@@ -105,21 +105,35 @@ test_bow_features = p1.extract_bow_feature_vectors(test_texts, dictionary)
 # test_bow_features and test_labels.
 #-------------------------------------------------------------------------------
 
-T = 25
-L = 0.0100
+# T = 25
+# L = 0.0100
 
-avg_peg_train_accuracy, avg_peg_test_accuracy = \
-   p1.classifier_accuracy(p1.pegasos, train_bow_features,test_bow_features,train_labels,test_labels,T=T,L=L)
-print("{:50} {:.4f}".format("Training accuracy for Pegasos:", avg_peg_train_accuracy))
-print("{:50} {:.4f}".format("Test accuracy for Pegasos:", avg_peg_test_accuracy))
+# avg_peg_train_accuracy, avg_peg_test_accuracy, train_final_theta , train_final_theta_0, test_final_theta , test_final_theta_0 = \
+#    p1.classifier_accuracy(p1.pegasos, train_bow_features,test_bow_features,train_labels,test_labels,T=T,L=L)
+# print("{:50} {:.4f}".format("Training accuracy for Pegasos:", avg_peg_train_accuracy))
+# print("{:50} {:.4f}".format("Test accuracy for Pegasos:", avg_peg_test_accuracy))
+# print("{:50} {}".format("Best train theta for Pegasos:",test_final_theta))
+# print("{:50} {}".format("Best train theta_0 for Pegasos:", test_final_theta_0 ))
+# print("{:50} {}".format("Best test theta for Pegasos:",train_final_theta))
+# print("{:50} {}".format("Best test theta_0 for Pegasos:", train_final_theta_0 ))
 
 #-------------------------------------------------------------------------------
 # Assign to best_theta, the weights (and not the bias!) learned by your most
 # accurate algorithm with the optimal choice of hyperparameters.
 #-------------------------------------------------------------------------------
 
-# best_theta = None # Your code here
-# wordlist   = [word for (idx, word) in sorted(zip(dictionary.values(), dictionary.keys()))]
-# sorted_word_features = utils.most_explanatory_word(best_theta, wordlist)
-# print("Most Explanatory Word Features")
-# print(sorted_word_features[:10])
+T = 25
+L = 0.0100
+
+avg_peg_train_accuracy, avg_peg_val_accuracy, train_final_theta , train_final_theta_0 , val_final_theta , val_final_theta_0 = \
+   p1.classifier_accuracy(p1.pegasos, train_bow_features,val_bow_features,train_labels,val_labels,T=T,L=L)
+print("{:50} {:.4f}".format("Training accuracy for Pegasos:", avg_peg_train_accuracy))
+print("{:50} {:.4f}".format("Validation accuracy for Pegasos:", avg_peg_val_accuracy))
+print("{:50} {}".format("Best theta for Pegasos:",val_final_theta))
+print("{:50} {}".format("Best theta_0 for Pegasos:", val_final_theta_0 ))
+
+best_theta , best_theta_0 = train_final_theta, train_final_theta_0
+wordlist   = [word for (idx, word) in sorted(zip(dictionary.values(), dictionary.keys()))]
+sorted_word_features = utils.most_explanatory_word(best_theta, wordlist)
+print("Most Explanatory Word Features")
+print(sorted_word_features[:10])
