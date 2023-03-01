@@ -320,6 +320,11 @@ def classify(feature_matrix, theta, theta_0):
         should be considered a positive classification.
     """
     # Your code here
+
+    
+    function = (np.dot(feature_matrix,theta) + theta_0)
+    y_out = np.where(function > 0, 1, -1)
+    return y_out
     raise NotImplementedError
 
 
@@ -357,6 +362,15 @@ def classifier_accuracy(
         accuracy of the trained classifier on the validation data.
     """
     # Your code here
+    train_theta, train_theta_0 = classifier(train_feature_matrix,train_labels,**kwargs)
+    train_y_out= classify(train_feature_matrix, train_theta, train_theta_0 )
+    train_accuracy = accuracy(train_y_out, train_labels)
+    
+    val_theta, val_theta_0 = classifier(val_feature_matrix,val_labels,**kwargs)
+    val_y_out= classify(val_feature_matrix, train_theta, train_theta_0 )
+    val_accuracy = accuracy(val_y_out, val_labels)
+
+    return (train_accuracy,val_accuracy)
     raise NotImplementedError
 
 
@@ -388,14 +402,15 @@ def bag_of_words(texts, remove_stopword=False):
         integer `index`.
     """
     # Your code here
-    raise NotImplementedError
+    
+    #raise NotImplementedError
 
     indices_by_word = {}  # maps word to unique index
     for text in texts:
         word_list = extract_words(text)
         for word in word_list:
             if word in indices_by_word: continue
-            if word in stopword: continue
+            #if word in stopword: continue
             indices_by_word[word] = len(indices_by_word)
 
     return indices_by_word
@@ -413,17 +428,17 @@ def extract_bow_feature_vectors(reviews, indices_by_word, binarize=True):
         in the dictionary.
     """
     # Your code here
-    raise NotImplementedErrort
+    #raise NotImplementedErrort
 
     feature_matrix = np.zeros([len(reviews), len(indices_by_word)], dtype=np.float64)
     for i, text in enumerate(reviews):
         word_list = extract_words(text)
         for word in word_list:
             if word not in indices_by_word: continue
-            feature_matrix[i, indices_by_word[word]] += 1
-    if binarize:
+            feature_matrix[i, indices_by_word[word]] = 1
+    #if binarize:
         # Your code here
-        raise NotImplementedErrort
+        # raise NotImplementedErrort
     return feature_matrix
 
 
