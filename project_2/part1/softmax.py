@@ -60,16 +60,15 @@ def compute_cost_function(X, Y, theta, lambda_factor, temp_parameter):
     regularization = (lambda_factor/2)*np.sum(theta**2)
     exp_term = (np.dot(theta, X.T)/temp_parameter)
     loss =  np.log(exp_term/(np.sum(exp_term, axis = 0)))
-    c = 0
+    
 
     for i in range(n):
         for j in range(k):
             if (Y[i] != j):
                 loss[j][i] = 0
-            c = c +  loss[j][i]
-    
-    c = (1/n)*c + regularization
 
+    
+    c = (1/n)*np.sum(loss) + regularization
     return c
     raise NotImplementedError
 
