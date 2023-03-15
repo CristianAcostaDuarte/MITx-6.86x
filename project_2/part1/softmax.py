@@ -58,8 +58,8 @@ def compute_cost_function(X, Y, theta, lambda_factor, temp_parameter):
     n = X.shape[0]
     k = theta.shape[0]
     regularization = (lambda_factor/2)*np.sum(theta**2)
-    exp_term = (np.dot(theta, X.T)/temp_parameter)
-    loss =  np.log(exp_term/(np.sum(exp_term, axis = 0)))
+    exp_term = np.exp((np.dot(theta, X.T)/temp_parameter))
+    loss =  -np.log(exp_term/(np.sum(exp_term, axis = 0)))
     
 
     for i in range(n):
