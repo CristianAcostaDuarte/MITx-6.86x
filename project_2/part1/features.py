@@ -7,6 +7,11 @@ def project_onto_PC(X, pcs, n_components, feature_means):
     Given principal component vectors pcs = principal_components(X)
     this function returns a new data array in which each sample in X
     has been projected onto the first n_components principcal components.
+    Args:
+        X - n, d NumPy array of n data points, each with d features
+        pcs
+        n_components - int
+        feature_means
     """
     # TODO: first center data using the feature_means
     # TODO: Return the projection of the centered dataset
@@ -16,7 +21,25 @@ def project_onto_PC(X, pcs, n_components, feature_means):
     #       of the eigenvectors returned by principal_components().
     #       Note that each eigenvector is already be a unit-vector,
     #       so the projection may be done using matrix multiplication.
-    raise NotImplementedError
+
+    # Center data
+    # print("n", n_components, "MEAN", feature_means)
+    # n, d = X.shape
+    # print(X)
+
+    # X_centered, _ = center_data(X)
+    # print("X1", X_centered)
+
+    X_centered = X - feature_means
+    # print("X2", X_centered, n_components)
+
+    # Take the eigenvector matrix: 'n' eigenvectors
+    V_n = pcs[:,0:n_components]
+    
+    # Project the data onto the principal components
+    projected_data = X_centered @ V_n
+    
+    return projected_data
 
 
 ### Functions which are already complete, for you to use ###
@@ -84,15 +107,12 @@ def cubic_features(X):
 def center_data(X):
     """
     Returns a centered version of the data, where each feature now has mean = 0
-
     Args:
         X - n x d NumPy array of n data points, each with d features
-
     Returns:
         - (n, d) NumPy array X' where for each i = 1, ..., n and j = 1, ..., d:
         X'[i][j] = X[i][j] - means[j]       
 	- (d, ) NumPy array with the columns means
-
     """
     feature_means = X.mean(axis=0)
     return (X - feature_means), feature_means
@@ -103,10 +123,8 @@ def principal_components(centered_data):
     Returns the principal component vectors of the data, sorted in decreasing order
     of eigenvalue magnitude. This function first calculates the covariance matrix
     and then finds its eigenvectors.
-
     Args:
         centered_data - n x d NumPy array of n data points, each with d features
-
     Returns:
         d x d NumPy array whose columns are the principal component directions sorted
         in descending order by the amount of variation each direction (these are
